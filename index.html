@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Dois Irmãos - Pedido Online</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #3e2723; /* Marrom escuro para o ambiente de bar */
+            color: #f5f5dc; /* Cor de texto creme */
+        }
+        .bg-bar-texture {
+            background-image: url('https://placehold.co/1200x800/2a1c18/f5f5dc?text=Bar+Dois+Irmãos'); /* Placeholder para uma textura de madeira */
+            background-size: cover;
+            background-position: center;
+        }
+        .btn-plus, .btn-minus {
+            background-color: #f59e0b; /* Amarelo/laranja para destaque */
+            color: #3e2723;
+            transition: all 0.2s;
+        }
+        .btn-plus:hover, .btn-minus:hover {
+            background-color: #d97706;
+            transform: scale(1.05);
+        }
+        .btn-checkout {
+            background-color: #10b981; /* Verde para ação de finalização */
+            transition: all 0.2s;
+        }
+        .btn-checkout:hover {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .modal {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .item-image {
+            object-fit: cover;
+        }
+        .category-icon {
+            @apply flex flex-col items-center justify-center p-4 bg-[#2a1c18] rounded-2xl shadow-lg cursor-pointer transition-transform duration-200 hover:scale-105;
+        }
+        .category-icon img {
+            @apply w-16 h-16 rounded-full mb-2 border-2 border-[#f59e0b];
+        }
+        .category-icon-label {
+            @apply text-sm font-semibold text-center mt-2;
+        }
+        .cart-item-card {
+            @apply flex justify-between items-center bg-gray-700 p-4 rounded-lg shadow-md mb-2;
+        }
+        .btn-option {
+            @apply w-full py-3 px-4 rounded-lg font-bold transition-colors;
+        }
+        /* Ajustes para telas menores */
+        @media (max-width: 640px) {
+            .category-icon {
+                padding: 10px;
+            }
+            .category-icon img {
+                width: 48px;
+                height: 48px;
+            }
+            .category-icon-label {
+                font-size: 0.75rem; /* text-xs */
+            }
+        }
+    </style>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="antialiased">
+    <div id="app" class="flex flex-col min-h-screen">
+        <!-- Cabeçalho -->
+        <header class="bg-bar-texture bg-no-repeat bg-cover bg-center text-center py-16 px-4 rounded-b-3xl shadow-xl">
+            <h1 class="text-5xl md:text-6xl font-bold text-white tracking-wide drop-shadow-lg">Bar Dois Irmãos</h1>
+            <p class="text-xl md:text-2xl mt-2 text-white drop-shadow-lg font-semibold">Faça seu pedido online!</p>
+        </header>
+
+        <!-- Conteúdo Principal - Ícones de Categorias -->
+        <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+            <h2 class="text-3xl font-bold text-[#f59e0b] text-center mb-6">Categorias</h2>
+            <div id="category-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Ícones de categorias serão renderizados aqui pelo JavaScript -->
+            </div>
+        </main>
+
+        <!-- Total e Botão para o Carrinho -->
+        <div class="sticky bottom-0 left-0 right-0 p-4 bg-gray-800 bg-opacity-90 backdrop-blur-sm shadow-inner rounded-t-3xl flex flex-col md:flex-row justify-between items-center">
+            <div class="flex-grow text-center md:text-left mb-2 md:mb-0">
+                <span class="text-lg font-bold">Total:</span>
+                <span id="total-price" class="text-2xl font-bold text-[#10b981] ml-2">R$ 0,00</span>
+            </div>
+            <button id="open-cart-button" class="w-full md:w-auto px-6 py-3 rounded-full text-lg font-bold text-white btn-checkout shadow-lg">
+                Conferir e Finalizar Compra
+            </button>
+        </div>
+
+        <!-- Modal para Itens da Categoria -->
+        <div id="item-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
+                <button id="close-item-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 id="modal-category-title" class="text-2xl font-bold text-center mb-4 text-[#f59e0b]"></h2>
+                <div id="modal-item-list" class="space-y-4 max-h-96 overflow-y-auto">
+                    <!-- Itens da categoria serão inseridos aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para o Carrinho (revisão e finalização) -->
+        <div id="cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
+                <button id="close-cart-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Seu Carrinho</h2>
+                <div id="cart-item-list" class="space-y-4 max-h-64 overflow-y-auto">
+                    <!-- Itens do carrinho serão inseridos aqui -->
+                </div>
+                <div class="mt-4 p-4 rounded-lg bg-gray-800">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold">Subtotal:</span>
+                        <span id="cart-subtotal-price" class="font-bold">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-semibold">Desconto:</span>
+                        <span id="cart-discount-price" class="font-bold text-[#10b981]">R$ 0,00</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-600 pt-2">
+                        <span class="text-xl font-bold">Total:</span>
+                        <span id="cart-total-price" class="text-2xl font-bold text-[#10b981]">R$ 0,00</span>
+                    </div>
+                    <div class="mt-4">
+                        <label for="coupon-code" class="block mb-2 font-semibold">Cupom de Desconto (opcional):</label>
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <input type="text" id="coupon-code" class="w-full p-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                            <button id="apply-coupon-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Aplicar</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="proceed-to-options-btn" class="mt-6 w-full rounded-full py-3 text-lg font-bold text-white btn-checkout shadow-lg">
+                    Continuar para Pagamento
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal para Opções de Pedido (Delivery ou Retirada) -->
+        <div id="order-options-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
+                <button id="close-options-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Como deseja receber seu pedido?</h2>
+                <div class="space-y-4">
+                    <button id="option-delivery" class="btn-option bg-[#f59e0b] hover:bg-[#d97706] text-[#3e2723]">Delivery</button>
+                    <button id="option-pickup" class="btn-option bg-gray-600 hover:bg-gray-500 text-white">Retirada na Loja</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para o Formulário de Finalização (Delivery) -->
+        <div id="checkout-delivery-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
+                <button id="close-delivery-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Detalhes do Cliente (Delivery)</h2>
+                <form id="checkout-delivery-form" class="space-y-4">
+                    <div>
+                        <label for="delivery-name" class="block mb-2 font-semibold">Nome:</label>
+                        <input type="text" id="delivery-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="delivery-address" class="block mb-2 font-semibold">Endereço:</label>
+                        <input type="text" id="delivery-address" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="delivery-phone" class="block mb-2 font-semibold">Telefone:</label>
+                        <input type="tel" id="delivery-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="delivery-reference" class="block mb-2 font-semibold">Ponto de Referência:</label>
+                        <input type="text" id="delivery-reference" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="delivery-doc" class="block mb-2 font-semibold">CPF ou RG:</label>
+                        <input type="text" id="delivery-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="delivery-payment" class="block mb-2 font-semibold">Forma de Pagamento:</label>
+                        <select id="delivery-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                            <option value="PIX">PIX</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="mt-6 w-full rounded-full py-3 text-lg font-bold text-white btn-checkout shadow-lg">
+                        Enviar Pedido
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para o Formulário de Finalização (Retirada) -->
+        <div id="checkout-pickup-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
+                <button id="close-pickup-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Detalhes do Cliente (Retirada)</h2>
+                <form id="checkout-pickup-form" class="space-y-4">
+                    <div>
+                        <label for="pickup-name" class="block mb-2 font-semibold">Nome:</label>
+                        <input type="text" id="pickup-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="pickup-phone" class="block mb-2 font-semibold">Telefone:</label>
+                        <input type="tel" id="pickup-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="pickup-doc" class="block mb-2 font-semibold">CPF ou RG:</label>
+                        <input type="text" id="pickup-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                    </div>
+                    <div>
+                        <label for="pickup-payment" class="block mb-2 font-semibold">Forma de Pagamento:</label>
+                        <select id="pickup-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                            <option value="PIX">PIX</option>
+                            <option value="Cartão de Débito">Cartão de Débito</option>
+                            <option value="Cartão de Crédito">Cartão de Crédito</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="mt-6 w-full rounded-full py-3 text-lg font-bold text-white btn-checkout shadow-lg">
+                        Enviar Pedido
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal para o Pagamento PIX -->
+        <div id="pix-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
+                <button id="close-pix-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Pagamento via PIX</h2>
+                <p class="text-lg mb-2">Total a pagar: <span id="pix-total-amount" class="font-bold text-[#10b981]">R$ 0,00</span></p>
+                <p class="text-sm mb-4 text-gray-400">Escaneie o QR Code abaixo ou utilize a chave PIX para pagar.</p>
+                
+                <div id="pix-qr-code-container" class="bg-white p-2 rounded-lg mx-auto w-48 h-48 mb-4">
+                    <img id="pix-qr-code-img" src="" alt="QR Code PIX" class="w-full h-full">
+                </div>
+                
+                <p class="font-semibold mb-2">Chave Copia e Cola:</p>
+                <div class="relative mb-4">
+                    <input type="text" id="pix-key-input" readonly class="w-full p-2 rounded-lg bg-gray-700 text-white text-center text-sm break-all">
+                    <button id="copy-pix-key-btn" class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+                
+                <button id="send-whatsapp-order-btn" class="mt-4 w-full rounded-full py-3 text-lg font-bold text-white btn-checkout shadow-lg">
+                    Enviar Pedido por WhatsApp
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Modal para Carrinho Vazio -->
+        <div id="empty-cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
+                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Atenção</h2>
+                <p>Seu carrinho está vazio. Por favor, adicione itens para continuar.</p>
+                <button id="close-empty-cart-modal" class="mt-4 px-6 py-2 rounded-full text-white bg-[#f59e0b] hover:bg-[#d97706] transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Dados do menu com descrições e imagens
+            const menu = {
+                "Refeições": [
+                    { id: 'ref1', name: "Contra filé", price: 27.00, description: "Corte macio e suculento, grelhado à perfeição.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref2', name: "Filé de frango", price: 19.00, description: "Filé de peito de frango grelhado, leve e saboroso.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref3', name: "Calabresa", price: 19.00, description: "Deliciosas fatias de linguiça calabresa acebolada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref4', name: "Bisteca", price: 19.00, description: "Bisteca de porco grelhada, temperada com ervas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref5', name: "Omelete presunto e queijo", price: 22.00, description: "Omelete fofinho recheado com presunto e queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref6', name: "Parmegiana de contra", price: 30.00, description: "Contra filé empanado com molho e queijo, gratinado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref7', name: "Parmegiana de frango", price: 30.00, description: "Filé de frango empanado com molho e queijo, gratinado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                ],
+                "Salgados": [
+                    { id: 'sal1', name: "Coxinha", price: 7.00, description: "Massa de mandioca com recheio de frango desfiado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
+                    { id: 'sal2', name: "Risoles", price: 7.00, description: "Risoles crocante recheado com carne moída.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
+                    { id: 'sal3', name: "Enroladinho de salsicha", price: 7.00, description: "Salsicha enrolada em massa de pão.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
+                    { id: 'sal4', name: "Bolinho de carne", price: 7.00, description: "Tradicional bolinho de carne, temperado com especiarias.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
+                ],
+                "Sanduíches": [
+                    { id: 'san1', name: "X-Burguer", price: 18.00, description: "Pão, hambúrguer, queijo e salada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san2', name: "X-Salada", price: 20.00, description: "Hambúrguer, queijo, alface, tomate e maionese.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san3', name: "X-Bacon", price: 22.00, description: "Hambúrguer, queijo, fatias de bacon crocante.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san4', name: "X-Tudo", price: 29.00, description: "O sanduíche completo, com tudo que você tem direito.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san5', name: "Misto Quente", price: 15.00, description: "Pão de forma tostado com presunto e queijo.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san6', name: "Churrasco e Queijo", price: 22.00, description: "Pão francês, bife de churrasco, queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san7', name: "Bauru", price: 17.00, description: "Pão francês com fatias de rosbife, tomate e queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san8', name: "Mortadela e Queijo", price: 17.00, description: "Pão francês com fatias generosas de mortadela e queijo.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san9', name: "Beirute", price: 42.00, description: "Pão sírio recheado com carne, queijo, ovo, bacon e salada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                ],
+                "Sucos": [
+                    { id: 'suc1', name: "Manga", price: 12.00, description: "Suco natural e refrescante de manga.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                    { id: 'suc2', name: "Caju", price: 12.00, description: "Suco natural de caju, com um sabor único.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                    { id: 'suc3', name: "Morango", price: 12.00, description: "Suco cremoso de morango, feito com a fruta fresca.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                    { id: 'suc4', name: "Suco Açaí com Leite e Frutas", price: 20.00, description: "Açaí batido com leite e frutas selecionadas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                    { id: 'suc5', name: "Açaí na Tigela", price: 25.00, description: "Açaí puro na tigela, com granola e frutas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                ],
+                "Refrigerantes": [
+                    { id: 'refri1', name: "Coca-Cola", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
+                    { id: 'refri2', name: "Fanta", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
+                    { id: 'refri3', name: "Coca-Cola Zero", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
+                    { id: 'refri4', name: "Coca-Cola 600ml", price: 9.00, description: "Garrafa 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
+                ],
+                "Bebidas": [
+                    { id: 'beb1', name: "Cerveja Heineken 600ml", price: 16.00, description: "Garrafa de 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
+                    { id: 'beb2', name: "Cerveja Skol, Brahma, Original, Petra 600ml", price: 12.00, description: "Garrafa de 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
+                    { id: 'beb3', name: "Cerveja Long Neck", price: 10.00, description: "Garrafa de 330ml, várias marcas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
+                ]
+            };
+            
+            const categories = Object.keys(menu);
+            const cart = {};
+            let allItems = [];
+            for (const category in menu) {
+                allItems = allItems.concat(menu[category]);
+            }
+            
+            const totalPriceSpan = document.getElementById('total-price');
+            const categoryList = document.getElementById('category-list');
+            const openCartButton = document.getElementById('open-cart-button');
+            
+            // Item Modal
+            const itemModal = document.getElementById('item-modal');
+            const closeItemModalBtn = document.getElementById('close-item-modal-btn');
+            const modalCategoryTitle = document.getElementById('modal-category-title');
+            const modalItemList = document.getElementById('modal-item-list');
+            
+            // Cart Modal
+            const cartModal = document.getElementById('cart-modal');
+            const closeCartModalBtn = document.getElementById('close-cart-modal-btn');
+            const cartItemList = document.getElementById('cart-item-list');
+            const cartSubtotalPrice = document.getElementById('cart-subtotal-price');
+            const cartDiscountPrice = document.getElementById('cart-discount-price');
+            const cartTotalPrice = document.getElementById('cart-total-price');
+            const proceedToOptionsBtn = document.getElementById('proceed-to-options-btn');
+
+            // Order Options Modal
+            const orderOptionsModal = document.getElementById('order-options-modal');
+            const closeOptionsModalBtn = document.getElementById('close-options-modal-btn');
+            const optionDeliveryBtn = document.getElementById('option-delivery');
+            const optionPickupBtn = document.getElementById('option-pickup');
+            
+            // Checkout Form Modals
+            const checkoutDeliveryModal = document.getElementById('checkout-delivery-modal');
+            const closeDeliveryModalBtn = document.getElementById('close-delivery-modal-btn');
+            const checkoutDeliveryForm = document.getElementById('checkout-delivery-form');
+            
+            const checkoutPickupModal = document.getElementById('checkout-pickup-modal');
+            const closePickupModalBtn = document.getElementById('close-pickup-modal-btn');
+            const checkoutPickupForm = document.getElementById('checkout-pickup-form');
+            
+            // PIX Modal
+            const pixModal = document.getElementById('pix-modal');
+            const closePixModalBtn = document.getElementById('close-pix-modal-btn');
+            const pixTotalAmountSpan = document.getElementById('pix-total-amount');
+            const pixQrCodeImg = document.getElementById('pix-qr-code-img');
+            const pixKeyInput = document.getElementById('pix-key-input');
+            const copyPixKeyBtn = document.getElementById('copy-pix-key-btn');
+            const sendWhatsappOrderBtn = document.getElementById('send-whatsapp-order-btn');
+
+            // Empty Cart Modal
+            const emptyCartModal = document.getElementById('empty-cart-modal');
+            const closeEmptyCartModalBtn = document.getElementById('close-empty-cart-modal');
+
+            // Variáveis globais para armazenar os dados do cliente para o WhatsApp
+            let customerData = {};
+            let orderType = '';
+
+            // Função para gerar o payload PIX
+            const generatePixPayload = (totalAmount) => {
+                const pixKey = '11940696636';
+                const merchantName = 'Bar Dois Irmãos';
+                const merchantCity = 'SAO PAULO';
+                const txid = `TX${Date.now()}`;
+                const amount = totalAmount.toFixed(2);
+                
+                // Helper para formatar o campo de dados
+                const formatField = (id, value) => {
+                    const length = value.length.toString().padStart(2, '0');
+                    return `${id}${length}${value}`;
+                };
+
+                const payload = [
+                    formatField('00', '01'), // Payload Format Indicator
+                    formatField('26', // Merchant Account Information
+                        formatField('00', 'br.gov.bcb.pix') +
+                        formatField('01', pixKey)
+                    ),
+                    formatField('52', '0000'), // Merchant Category Code
+                    formatField('53', '986'), // Transaction Currency
+                    formatField('54', amount), // Transaction Amount
+                    formatField('58', 'BR'), // Country Code
+                    formatField('59', merchantName), // Merchant Name
+                    formatField('60', merchantCity), // Merchant City
+                    formatField('62', 
+                        formatField('05', txid)
+                    ), // Additional Data Field
+                    '6304' // CRC16 placeholder
+                ].join('');
+                
+                // Função para gerar o CRC16 (CRC-16/CCITT-FALSE)
+                const getCrc16 = (payload) => {
+                    let crc = 0xFFFF;
+                    const polynomial = 0x1021;
+                    const bytes = new TextEncoder().encode(payload);
+
+                    for (let byte of bytes) {
+                        crc ^= byte << 8;
+                        for (let i = 0; i < 8; i++) {
+                            crc = (crc & 0x8000) ? (crc << 1) ^ polynomial : crc << 1;
+                        }
+                    }
+                    return (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+                };
+                
+                const crc16 = getCrc16(payload);
+                return payload.slice(0, -4) + crc16;
+            };
+
+            // Renderiza os ícones das categorias
+            function renderCategories() {
+                categoryList.innerHTML = '';
+                categories.forEach(category => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = "category-icon";
+                    categoryDiv.dataset.category = category;
+                    categoryDiv.innerHTML = `
+                        <img src="${menu[category][0].image}" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
+                        <span class="category-icon-label">${category}</span>
+                    `;
+                    categoryList.appendChild(categoryDiv);
+                });
+            }
+
+            // Renderiza os itens de uma categoria no modal
+            function renderCategoryItems(categoryName) {
+                modalCategoryTitle.textContent = categoryName;
+                modalItemList.innerHTML = '';
+                menu[categoryName].forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = "bg-gray-800 rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4";
+                    itemDiv.innerHTML = `
+                        <img src="${item.image}" alt="Imagem de ${item.name}" class="w-20 h-20 rounded-full border-2 border-[#f59e0b] item-image">
+                        <div class="flex-grow text-center sm:text-left">
+                            <h3 class="text-xl font-semibold">${item.name}</h3>
+                            <p class="text-sm text-gray-400">${item.description}</p>
+                            <p class="text-xl font-bold text-[#10b981] mt-1">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                        <div class="flex items-center space-x-2 mt-2 sm:mt-0">
+                            <button data-id="${item.id}" class="btn-minus w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-md">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span id="quantity-${item.id}" class="w-8 text-center text-xl font-bold">${cart[item.id] || 0}</span>
+                            <button data-id="${item.id}" class="btn-plus w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-md">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    `;
+                    modalItemList.appendChild(itemDiv);
+                });
+            }
+
+            // Renderiza o carrinho no modal
+            function renderCart() {
+                cartItemList.innerHTML = '';
+                let subtotal = 0;
+                let discount = 0; // Placeholder para cupons
+                
+                if (Object.keys(cart).length === 0) {
+                    cartItemList.innerHTML = '<p class="text-center text-gray-400">Seu carrinho está vazio.</p>';
+                } else {
+                    for (const itemId in cart) {
+                        const item = allItems.find(i => i.id === itemId);
+                        if (item) {
+                            const quantity = cart[itemId];
+                            const itemTotal = quantity * item.price;
+                            subtotal += itemTotal;
+                            const cartItemDiv = document.createElement('div');
+                            cartItemDiv.className = "cart-item-card";
+                            cartItemDiv.innerHTML = `
+                                <div class="flex-grow">
+                                    <h4 class="font-semibold">${item.name}</h4>
+                                    <span class="text-sm text-gray-400">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button data-id="${item.id}" class="btn-minus w-6 h-6 rounded-full font-bold text-sm flex items-center justify-center">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span id="cart-quantity-${item.id}" class="w-6 text-center">${quantity}</span>
+                                    <button data-id="${item.id}" class="btn-plus w-6 h-6 rounded-full font-bold text-sm flex items-center justify-center">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            `;
+                            cartItemList.appendChild(cartItemDiv);
+                        }
+                    }
+                }
+                
+                const total = subtotal - discount;
+                cartSubtotalPrice.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+                cartDiscountPrice.textContent = `- R$ ${discount.toFixed(2).replace('.', ',')}`;
+                cartTotalPrice.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                
+                updateTotalBar();
+            }
+
+            // Atualiza o total na barra inferior
+            function updateTotalBar() {
+                let total = 0;
+                allItems.forEach(item => {
+                    total += (cart[item.id] || 0) * item.price;
+                });
+                totalPriceSpan.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
+
+            // Lida com cliques nos ícones das categorias
+            categoryList.addEventListener('click', (e) => {
+                const categoryIcon = e.target.closest('.category-icon');
+                if (!categoryIcon) return;
+                
+                const categoryName = categoryIcon.dataset.category;
+                renderCategoryItems(categoryName);
+                itemModal.classList.remove('hidden');
+            });
+
+            // Lida com cliques nos botões de + e -
+            document.body.addEventListener('click', (e) => {
+                const button = e.target.closest('button');
+                if (!button) return;
+                
+                const itemId = button.dataset.id;
+                if (!itemId) return;
+
+                if (button.classList.contains('btn-plus')) {
+                    cart[itemId] = (cart[itemId] || 0) + 1;
+                } else if (button.classList.contains('btn-minus')) {
+                    if (cart[itemId] && cart[itemId] > 0) {
+                        cart[itemId] -= 1;
+                        if (cart[itemId] === 0) {
+                            delete cart[itemId];
+                        }
+                    }
+                }
+                updateTotalBar();
+                
+                // Atualiza a quantidade nos modais, se estiverem abertos
+                const itemQuantitySpan = document.getElementById(`quantity-${itemId}`);
+                if (itemQuantitySpan) {
+                    itemQuantitySpan.textContent = cart[itemId] || 0;
+                }
+                const cartQuantitySpan = document.getElementById(`cart-quantity-${itemId}`);
+                if (cartQuantitySpan) {
+                    cartQuantitySpan.textContent = cart[itemId] || 0;
+                }
+                if (cartModal.classList.contains('hidden') === false) {
+                    renderCart(); // Re-renderiza o carrinho para remover itens se a quantidade for 0
+                }
+            });
+
+            // Lida com o botão "Conferir e Finalizar Compra"
+            openCartButton.addEventListener('click', () => {
+                if (Object.keys(cart).length === 0) {
+                    emptyCartModal.classList.remove('hidden');
+                    return;
+                }
+                renderCart();
+                cartModal.classList.remove('hidden');
+            });
+
+            // Lida com o botão "Continuar para Pagamento" no carrinho
+            proceedToOptionsBtn.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+                orderOptionsModal.classList.remove('hidden');
+            });
+            
+            // Lida com o botão de opção "Delivery"
+            optionDeliveryBtn.addEventListener('click', () => {
+                orderType = 'Delivery';
+                orderOptionsModal.classList.add('hidden');
+                checkoutDeliveryModal.classList.remove('hidden');
+            });
+
+            // Lida com o botão de opção "Retirada na Loja"
+            optionPickupBtn.addEventListener('click', () => {
+                orderType = 'Retirada na Loja';
+                orderOptionsModal.classList.add('hidden');
+                checkoutPickupModal.classList.remove('hidden');
+            });
+            
+            // Fecha o modal de itens
+            closeItemModalBtn.addEventListener('click', () => {
+                itemModal.classList.add('hidden');
+            });
+            
+            // Fecha o modal do carrinho
+            closeCartModalBtn.addEventListener('click', () => {
+                cartModal.classList.add('hidden');
+            });
+
+            // Fecha o modal de opções de pedido
+            closeOptionsModalBtn.addEventListener('click', () => {
+                orderOptionsModal.classList.add('hidden');
+            });
+
+            // Fecha o modal do formulário de checkout (Delivery)
+            closeDeliveryModalBtn.addEventListener('click', () => {
+                checkoutDeliveryModal.classList.add('hidden');
+            });
+
+            // Fecha o modal do formulário de checkout (Retirada)
+            closePickupModalBtn.addEventListener('click', () => {
+                checkoutPickupModal.classList.add('hidden');
+            });
+
+            // Fecha o modal de PIX
+            closePixModalBtn.addEventListener('click', () => {
+                pixModal.classList.add('hidden');
+            });
+
+            // Fecha o modal de carrinho vazio
+            closeEmptyCartModalBtn.addEventListener('click', () => {
+                emptyCartModal.classList.add('hidden');
+            });
+
+            // Lida com o envio do formulário para o WhatsApp (Delivery)
+            checkoutDeliveryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                customerData.name = document.getElementById('delivery-name').value;
+                customerData.address = document.getElementById('delivery-address').value;
+                customerData.phone = document.getElementById('delivery-phone').value;
+                customerData.reference = document.getElementById('delivery-reference').value;
+                customerData.doc = document.getElementById('delivery-doc').value;
+                customerData.paymentMethod = document.getElementById('delivery-payment').value;
+
+                if (customerData.paymentMethod === 'PIX') {
+                    openPixModal();
+                    checkoutDeliveryModal.classList.add('hidden');
+                } else {
+                    sendWhatsAppMessage();
+                    checkoutDeliveryModal.classList.add('hidden');
+                }
+            });
+            
+            // Lida com o envio do formulário para o WhatsApp (Retirada)
+            checkoutPickupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                customerData.name = document.getElementById('pickup-name').value;
+                customerData.phone = document.getElementById('pickup-phone').value;
+                customerData.doc = document.getElementById('pickup-doc').value;
+                customerData.paymentMethod = document.getElementById('pickup-payment').value;
+
+                if (customerData.paymentMethod === 'PIX') {
+                    openPixModal();
+                    checkoutPickupModal.classList.add('hidden');
+                } else {
+                    sendWhatsAppMessage();
+                    checkoutPickupModal.classList.add('hidden');
+                }
+            });
+
+            // Abre o modal de PIX
+            function openPixModal() {
+                const total = parseFloat(totalPriceSpan.textContent.replace('R$', '').replace(',', '.'));
+                const pixPayload = generatePixPayload(total);
+                
+                pixTotalAmountSpan.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                pixQrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixPayload)}`;
+                pixKeyInput.value = pixPayload;
+
+                pixModal.classList.remove('hidden');
+            }
+
+            // Lida com a função de copiar a chave PIX
+            copyPixKeyBtn.addEventListener('click', () => {
+                pixKeyInput.select();
+                document.execCommand('copy');
+            });
+
+            // Lida com o botão de envio no modal PIX
+            sendWhatsappOrderBtn.addEventListener('click', () => {
+                sendWhatsAppMessage();
+                pixModal.classList.add('hidden');
+            });
+
+
+            // Função para enviar mensagem de WhatsApp
+            function sendWhatsAppMessage() {
+                let message = `*Pedido Online - Bar Dois Irmãos*\n\n`;
+                message += `*Tipo:* ${orderType}\n`;
+                message += `*Nome:* ${customerData.name}\n`;
+                if(orderType === 'Delivery') {
+                    message += `*Endereço:* ${customerData.address}\n`;
+                    if(customerData.reference) message += `*Ponto de Referência:* ${customerData.reference}\n`;
+                }
+                message += `*Telefone:* ${customerData.phone}\n`;
+                message += `*CPF/RG:* ${customerData.doc}\n\n`;
+                message += `*Itens do Pedido:*\n`;
+
+                let total = 0;
+                
+                for (const itemId in cart) {
+                    const item = allItems.find(i => i.id === itemId);
+                    if (item) {
+                        const quantity = cart[itemId];
+                        const itemTotal = quantity * item.price;
+                        message += `\n${quantity}x ${item.name} - R$ ${itemTotal.toFixed(2).replace('.', ',')}\n`;
+                        message += `> ${item.description}\n`;
+                        total += itemTotal;
+                    }
+                }
+
+                message += `\n*Total a pagar:* R$ ${total.toFixed(2).replace('.', ',')}\n`;
+                message += `*Forma de Pagamento:* ${customerData.paymentMethod}`;
+                if (customerData.paymentMethod === 'PIX') {
+                  message += `\n*Chave PIX:* 11940696636`;
+                }
+
+
+                const whatsappNumber = '5511940696636'; // Número de telefone do bar
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            }
+
+            renderCategories();
+            updateTotalBar();
+        });
+    </script>
+</body>
+</html>
