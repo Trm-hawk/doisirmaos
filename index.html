@@ -390,6 +390,16 @@
             let customerData = {};
             let orderType = '';
 
+            // Função para fechar qualquer modal ao clicar no overlay
+            document.addEventListener('click', (e) => {
+                const modals = [itemModal, cartModal, orderOptionsModal, checkoutDeliveryModal, checkoutPickupModal, pixModal, emptyCartModal];
+                modals.forEach(modal => {
+                    if (e.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            });
+
             // Função para gerar o payload PIX
             const generatePixPayload = (totalAmount) => {
                 const pixKey = '11940696636';
@@ -539,17 +549,7 @@
                 });
                 totalPriceSpan.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
             }
-
-            // Lida com cliques nos ícones das categorias
-            categoryList.addEventListener('click', (e) => {
-                const categoryIcon = e.target.closest('.category-icon');
-                if (!categoryIcon) return;
-                
-                const categoryName = categoryIcon.dataset.category;
-                renderCategoryItems(categoryName);
-                itemModal.classList.remove('hidden');
-            });
-
+            
             // Lida com cliques nos botões de + e -
             document.body.addEventListener('click', (e) => {
                 const button = e.target.closest('button');
@@ -583,6 +583,17 @@
                     renderCart(); // Re-renderiza o carrinho para remover itens se a quantidade for 0
                 }
             });
+
+            // Lida com cliques nos ícones das categorias
+            categoryList.addEventListener('click', (e) => {
+                const categoryIcon = e.target.closest('.category-icon');
+                if (!categoryIcon) return;
+                
+                const categoryName = categoryIcon.dataset.category;
+                renderCategoryItems(categoryName);
+                itemModal.classList.remove('hidden');
+            });
+
 
             // Lida com o botão "Conferir e Finalizar Compra"
             openCartButton.addEventListener('click', () => {
