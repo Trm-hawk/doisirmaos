@@ -31,6 +31,8 @@
             background-color: #fbbf24; /* Amarelo/laranja para destaque */
             color: #3e2723;
             transition: all 0.2s;
+            border-radius: 0.5rem; /* Cantos levemente arredondados */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra discreta */
         }
         .btn-plus:hover, .btn-minus:hover {
             background-color: #f59e0b;
@@ -52,7 +54,7 @@
             object-fit: cover;
         }
         .category-icon {
-            @apply flex flex-col items-center justify-center p-4 bg-[#2a1c18] rounded-2xl shadow-lg cursor-pointer transition-transform duration-200 hover:scale-105;
+            @apply flex flex-col items-center justify-center p-4 bg-[#2a1c18] rounded-xl shadow-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl;
         }
         .category-icon img {
             @apply w-16 h-16 rounded-full mb-2 border-2 border-[#fbbf24];
@@ -468,7 +470,7 @@
                     categoryDiv.className = "category-icon";
                     categoryDiv.dataset.category = category;
                     categoryDiv.innerHTML = `
-                        <img src="${categoryImages[category]}" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
+                        <img src="${categoryImages[category]}" alt="Ícone de ${category}" class="rounded-full">
                         <span class="category-icon-label">${category}</span>
                     `;
                     categoryList.appendChild(categoryDiv);
@@ -490,11 +492,11 @@
                             <p class="text-xl font-bold text-[#10b981] mt-1">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
                         </div>
                         <div class="flex items-center space-x-2 mt-2 sm:mt-0">
-                            <button data-id="${item.id}" class="btn-minus w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-md">
+                            <button data-id="${item.id}" class="btn-minus w-8 h-8 rounded-xl font-bold flex items-center justify-center shadow-lg transition-all duration-300">
                                 <i class="fas fa-minus"></i>
                             </button>
                             <span id="quantity-${item.id}" class="w-8 text-center text-xl font-bold">${cart[item.id] || 0}</span>
-                            <button data-id="${item.id}" class="btn-plus w-8 h-8 rounded-full font-bold flex items-center justify-center shadow-md">
+                            <button data-id="${item.id}" class="btn-plus w-8 h-8 rounded-xl font-bold flex items-center justify-center shadow-lg transition-all duration-300">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
@@ -526,11 +528,11 @@
                                     <span class="text-sm text-gray-400">R$ ${item.price.toFixed(2).replace('.', ',')}</span>
                                 </div>
                                 <div class="flex items-center space-x-2">
-                                    <button data-id="${item.id}" class="btn-minus w-6 h-6 rounded-full font-bold text-sm flex items-center justify-center">
+                                    <button data-id="${item.id}" class="btn-minus w-6 h-6 rounded-xl font-bold text-sm flex items-center justify-center">
                                         <i class="fas fa-minus"></i>
                                     </button>
                                     <span id="cart-quantity-${item.id}" class="w-6 text-center">${quantity}</span>
-                                    <button data-id="${item.id}" class="btn-plus w-6 h-6 rounded-full font-bold text-sm flex items-center justify-center">
+                                    <button data-id="${item.id}" class="btn-plus w-6 h-6 rounded-xl font-bold text-sm flex items-center justify-center">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
