@@ -13,11 +13,19 @@
             background-color: #5d4037; /* Marrom mais quente para o ambiente de bar/comida */
             color: #fff8e1; /* Cor de texto creme */
         }
-        .bg-bar-texture {
-            background-image: url('https://i.ibb.co/Y71rMfHC/banner.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+        /* Ajustes para a imagem do banner direto no HTML */
+        .banner-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            max-height: 25vh; /* 1/4 da altura da página */
+        }
+        .banner-container img {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain; /* Garante que a imagem caiba sem ser cortada */
         }
         .btn-plus, .btn-minus {
             background-color: #fbbf24; /* Amarelo/laranja para destaque */
@@ -77,9 +85,9 @@
 </head>
 <body class="antialiased">
     <div id="app" class="flex flex-col min-h-screen">
-        <!-- Cabeçalho -->
-        <header class="text-center h-[20vh] py-16 px-4 rounded-b-3xl shadow-xl flex flex-col items-center justify-center">
-             <img src="https://i.ibb.co/Y71rMfHC/banner.png" alt="Menu AI Digital" class="max-w-full h-auto">
+        <!-- Cabeçalho com o banner -->
+        <header class="text-center bg-[#5d4037] py-4 px-4 rounded-b-3xl shadow-xl flex flex-col items-center justify-center banner-container">
+            <img src="https://i.ibb.co/7NWZKjDh/banner.png" alt="Menu AI Digital">
         </header>
 
         <!-- Conteúdo Principal - Ícones de Categorias -->
