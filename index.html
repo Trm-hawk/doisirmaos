@@ -3,28 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bar Dois Irmãos - Pedido Online</title>
+    <title>Menu AI Digital - Pedido Online</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #3e2723; /* Marrom escuro para o ambiente de bar */
-            color: #f5f5dc; /* Cor de texto creme */
+            background-color: #5d4037; /* Marrom mais quente para o ambiente de bar/comida */
+            color: #fff8e1; /* Cor de texto creme */
         }
         .bg-bar-texture {
-            background-image: url('https://placehold.co/1200x800/2a1c18/f5f5dc?text=Bar+Dois+Irmãos'); /* Placeholder para uma textura de madeira */
+            background-image: url('https://i.ibb.co/Y71rMfHC/banner.png');
             background-size: cover;
             background-position: center;
         }
         .btn-plus, .btn-minus {
-            background-color: #f59e0b; /* Amarelo/laranja para destaque */
+            background-color: #fbbf24; /* Amarelo/laranja para destaque */
             color: #3e2723;
             transition: all 0.2s;
         }
         .btn-plus:hover, .btn-minus:hover {
-            background-color: #d97706;
+            background-color: #f59e0b;
             transform: scale(1.05);
         }
         .btn-checkout {
@@ -46,7 +46,7 @@
             @apply flex flex-col items-center justify-center p-4 bg-[#2a1c18] rounded-2xl shadow-lg cursor-pointer transition-transform duration-200 hover:scale-105;
         }
         .category-icon img {
-            @apply w-16 h-16 rounded-full mb-2 border-2 border-[#f59e0b];
+            @apply w-16 h-16 rounded-full mb-2 border-2 border-[#fbbf24];
         }
         .category-icon-label {
             @apply text-sm font-semibold text-center mt-2;
@@ -78,13 +78,12 @@
     <div id="app" class="flex flex-col min-h-screen">
         <!-- Cabeçalho -->
         <header class="bg-bar-texture bg-no-repeat bg-cover bg-center text-center py-16 px-4 rounded-b-3xl shadow-xl">
-            <h1 class="text-5xl md:text-6xl font-bold text-white tracking-wide drop-shadow-lg">Bar Dois Irmãos</h1>
-            <p class="text-xl md:text-2xl mt-2 text-white drop-shadow-lg font-semibold">Faça seu pedido online!</p>
+            <h1 class="text-5xl md:text-6xl font-bold text-white tracking-wide drop-shadow-lg sr-only">Menu AI Digital</h1>
         </header>
 
         <!-- Conteúdo Principal - Ícones de Categorias -->
         <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
-            <h2 class="text-3xl font-bold text-[#f59e0b] text-center mb-6">Categorias</h2>
+            <h2 class="text-3xl font-bold text-[#fbbf24] text-center mb-6">Cardápio</h2>
             <div id="category-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 <!-- Ícones de categorias serão renderizados aqui pelo JavaScript -->
             </div>
@@ -105,7 +104,7 @@
         <div id="item-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-item-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 id="modal-category-title" class="text-2xl font-bold text-center mb-4 text-[#f59e0b]"></h2>
+                <h2 id="modal-category-title" class="text-2xl font-bold text-center mb-4 text-[#fbbf24]"></h2>
                 <div id="modal-item-list" class="space-y-4 max-h-96 overflow-y-auto">
                     <!-- Itens da categoria serão inseridos aqui -->
                 </div>
@@ -116,7 +115,7 @@
         <div id="cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-cart-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Seu Carrinho</h2>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#fbbf24]">Seu Carrinho</h2>
                 <div id="cart-item-list" class="space-y-4 max-h-64 overflow-y-auto">
                     <!-- Itens do carrinho serão inseridos aqui -->
                 </div>
@@ -136,7 +135,7 @@
                     <div class="mt-4">
                         <label for="coupon-code" class="block mb-2 font-semibold">Cupom de Desconto (opcional):</label>
                         <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                            <input type="text" id="coupon-code" class="w-full p-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                            <input type="text" id="coupon-code" class="w-full p-2 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                             <button id="apply-coupon-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Aplicar</button>
                         </div>
                     </div>
@@ -151,9 +150,9 @@
         <div id="order-options-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
                 <button id="close-options-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Como deseja receber seu pedido?</h2>
+                <h2 class="text-2xl font-bold mb-4 text-[#fbbf24]">Como deseja receber seu pedido?</h2>
                 <div class="space-y-4">
-                    <button id="option-delivery" class="btn-option bg-[#f59e0b] hover:bg-[#d97706] text-[#3e2723]">Delivery</button>
+                    <button id="option-delivery" class="btn-option bg-[#fbbf24] hover:bg-[#d97706] text-[#3e2723]">Delivery</button>
                     <button id="option-pickup" class="btn-option bg-gray-600 hover:bg-gray-500 text-white">Retirada na Loja</button>
                 </div>
             </div>
@@ -163,31 +162,31 @@
         <div id="checkout-delivery-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-delivery-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Detalhes do Cliente (Delivery)</h2>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#fbbf24]">Detalhes do Cliente (Delivery)</h2>
                 <form id="checkout-delivery-form" class="space-y-4">
                     <div>
                         <label for="delivery-name" class="block mb-2 font-semibold">Nome:</label>
-                        <input type="text" id="delivery-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="delivery-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="delivery-address" class="block mb-2 font-semibold">Endereço:</label>
-                        <input type="text" id="delivery-address" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="delivery-address" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="delivery-phone" class="block mb-2 font-semibold">Telefone:</label>
-                        <input type="tel" id="delivery-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="tel" id="delivery-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="delivery-reference" class="block mb-2 font-semibold">Ponto de Referência:</label>
-                        <input type="text" id="delivery-reference" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="delivery-reference" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="delivery-doc" class="block mb-2 font-semibold">CPF ou RG:</label>
-                        <input type="text" id="delivery-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="delivery-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="delivery-payment" class="block mb-2 font-semibold">Forma de Pagamento:</label>
-                        <select id="delivery-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <select id="delivery-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                             <option value="PIX">PIX</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
@@ -205,23 +204,23 @@
         <div id="checkout-pickup-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-pickup-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 class="text-2xl font-bold text-center mb-4 text-[#f59e0b]">Detalhes do Cliente (Retirada)</h2>
+                <h2 class="text-2xl font-bold text-center mb-4 text-[#fbbf24]">Detalhes do Cliente (Retirada)</h2>
                 <form id="checkout-pickup-form" class="space-y-4">
                     <div>
                         <label for="pickup-name" class="block mb-2 font-semibold">Nome:</label>
-                        <input type="text" id="pickup-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="pickup-name" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="pickup-phone" class="block mb-2 font-semibold">Telefone:</label>
-                        <input type="tel" id="pickup-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="tel" id="pickup-phone" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="pickup-doc" class="block mb-2 font-semibold">CPF ou RG:</label>
-                        <input type="text" id="pickup-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <input type="text" id="pickup-doc" required class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                     </div>
                     <div>
                         <label for="pickup-payment" class="block mb-2 font-semibold">Forma de Pagamento:</label>
-                        <select id="pickup-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#f59e0b]">
+                        <select id="pickup-payment" required class="w-full p-3 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#fbbf24]">
                             <option value="PIX">PIX</option>
                             <option value="Cartão de Débito">Cartão de Débito</option>
                             <option value="Cartão de Crédito">Cartão de Crédito</option>
@@ -239,7 +238,7 @@
         <div id="pix-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
                 <button id="close-pix-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Pagamento via PIX</h2>
+                <h2 class="text-2xl font-bold mb-4 text-[#fbbf24]">Pagamento via PIX</h2>
                 <p class="text-lg mb-2">Total a pagar: <span id="pix-total-amount" class="font-bold text-[#10b981]">R$ 0,00</span></p>
                 <p class="text-sm mb-4 text-gray-400">Escaneie o QR Code abaixo ou utilize a chave PIX para pagar.</p>
                 
@@ -265,60 +264,62 @@
         <!-- Modal para Carrinho Vazio -->
         <div id="empty-cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
-                <h2 class="text-2xl font-bold mb-4 text-[#f59e0b]">Atenção</h2>
+                <h2 class="text-2xl font-bold mb-4 text-[#fbbf24]">Atenção</h2>
                 <p>Seu carrinho está vazio. Por favor, adicione itens para continuar.</p>
-                <button id="close-empty-cart-modal" class="mt-4 px-6 py-2 rounded-full text-white bg-[#f59e0b] hover:bg-[#d97706] transition-colors">Fechar</button>
+                <button id="close-empty-cart-modal" class="mt-4 px-6 py-2 rounded-full text-white bg-[#fbbf24] hover:bg-[#d97706] transition-colors">Fechar</button>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const GITHUB_BASE_URL = 'https://raw.githubusercontent.com/Trm-hawk/menuaidigital_imagens/';
+
             // Dados do menu com descrições e imagens
             const menu = {
                 "Refeições": [
-                    { id: 'ref1', name: "Contra filé", price: 27.00, description: "Corte macio e suculento, grelhado à perfeição.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref2', name: "Filé de frango", price: 19.00, description: "Filé de peito de frango grelhado, leve e saboroso.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref3', name: "Calabresa", price: 19.00, description: "Deliciosas fatias de linguiça calabresa acebolada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref4', name: "Bisteca", price: 19.00, description: "Bisteca de porco grelhada, temperada com ervas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref5', name: "Omelete presunto e queijo", price: 22.00, description: "Omelete fofinho recheado com presunto e queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref6', name: "Parmegiana de contra", price: 30.00, description: "Contra filé empanado com molho e queijo, gratinado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
-                    { id: 'ref7', name: "Parmegiana de frango", price: 30.00, description: "Filé de frango empanado com molho e queijo, gratinado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refeições" },
+                    { id: 'ref1', name: "Contra filé", price: 27.00, description: "Corte macio e suculento, grelhado à perfeição.", image: "https://i.ibb.co/ZzVL6NP/1-1.png" },
+                    { id: 'ref2', name: "Filé de frango", price: 19.00, description: "Filé de peito de frango grelhado, leve e saboroso.", image: "https://i.ibb.co/ccv0Mn8/1-2.png" },
+                    { id: 'ref3', name: "Calabresa", price: 19.00, description: "Deliciosas fatias de linguiça calabresa acebolada.", image: "https://i.ibb.co/s9R81PS/1-3.png" },
+                    { id: 'ref4', name: "Bisteca", price: 19.00, description: "Bisteca de porco grelhada, temperada com ervas.", image: "https://i.ibb.co/KzQN80V/1-4.png" },
+                    { id: 'ref5', name: "Omelete presunto e queijo", price: 22.00, description: "Omelete fofinho recheado com presunto e queijo derretido.", image: "https://i.ibb.co/pjxz74T/1-5.png" },
+                    { id: 'ref6', name: "Parmegiana de contra", price: 30.00, description: "Contra filé empanado com molho e queijo, gratinado.", image: "https://i.ibb.co/XZfm458/1-6.png" },
+                    { id: 'ref7', name: "Parmegiana de frango", price: 30.00, description: "Filé de frango empanado com molho e queijo, gratinado.", image: "https://i.ibb.co/nNywmsd/1-7.png" },
                 ],
                 "Salgados": [
-                    { id: 'sal1', name: "Coxinha", price: 7.00, description: "Massa de mandioca com recheio de frango desfiado.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
-                    { id: 'sal2', name: "Risoles", price: 7.00, description: "Risoles crocante recheado com carne moída.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
-                    { id: 'sal3', name: "Enroladinho de salsicha", price: 7.00, description: "Salsicha enrolada em massa de pão.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
-                    { id: 'sal4', name: "Bolinho de carne", price: 7.00, description: "Tradicional bolinho de carne, temperado com especiarias.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Salgados" },
+                    { id: 'sal1', name: "Coxinha", price: 7.00, description: "Massa de mandioca com recheio de frango desfiado.", image: GITHUB_BASE_URL + "2.1.png" },
+                    { id: 'sal2', name: "Risoles", price: 7.00, description: "Risoles crocante recheado com carne moída.", image: GITHUB_BASE_URL + "2.2.png" },
+                    { id: 'sal3', name: "Enroladinho de salsicha", price: 7.00, description: "Salsicha enrolada em massa de pão.", image: GITHUB_BASE_URL + "2.3.png" },
+                    { id: 'sal4', name: "Bolinho de carne", price: 7.00, description: "Tradicional bolinho de carne, temperado com especiarias.", image: GITHUB_BASE_URL + "2.4.png" },
                 ],
                 "Sanduíches": [
-                    { id: 'san1', name: "X-Burguer", price: 18.00, description: "Pão, hambúrguer, queijo e salada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san2', name: "X-Salada", price: 20.00, description: "Hambúrguer, queijo, alface, tomate e maionese.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san3', name: "X-Bacon", price: 22.00, description: "Hambúrguer, queijo, fatias de bacon crocante.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san4', name: "X-Tudo", price: 29.00, description: "O sanduíche completo, com tudo que você tem direito.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san5', name: "Misto Quente", price: 15.00, description: "Pão de forma tostado com presunto e queijo.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san6', name: "Churrasco e Queijo", price: 22.00, description: "Pão francês, bife de churrasco, queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san7', name: "Bauru", price: 17.00, description: "Pão francês com fatias de rosbife, tomate e queijo derretido.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san8', name: "Mortadela e Queijo", price: 17.00, description: "Pão francês com fatias generosas de mortadela e queijo.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
-                    { id: 'san9', name: "Beirute", price: 42.00, description: "Pão sírio recheado com carne, queijo, ovo, bacon e salada.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sanduíches" },
+                    { id: 'san1', name: "X-Burguer", price: 18.00, description: "Pão, hambúrguer, queijo e salada.", image: GITHUB_BASE_URL + "3.1.png" },
+                    { id: 'san2', name: "X-Salada", price: 20.00, description: "Hambúrguer, queijo, alface, tomate e maionese.", image: GITHUB_BASE_URL + "3.2.png" },
+                    { id: 'san3', name: "X-Bacon", price: 22.00, description: "Hambúrguer, queijo, fatias de bacon crocante.", image: GITHUB_BASE_URL + "3.3.png" },
+                    { id: 'san4', name: "X-Tudo", price: 29.00, description: "O sanduíche completo, com tudo que você tem direito.", image: GITHUB_BASE_URL + "3.4.png" },
+                    { id: 'san5', name: "Misto Quente", price: 15.00, description: "Pão de forma tostado com presunto e queijo.", image: GITHUB_BASE_URL + "3.5.png" },
+                    { id: 'san6', name: "Churrasco e Queijo", price: 22.00, description: "Pão francês, bife de churrasco, queijo derretido.", image: GITHUB_BASE_URL + "3.6.png" },
+                    { id: 'san7', name: "Bauru", price: 17.00, description: "Pão francês com fatias de rosbife, tomate e queijo derretido.", image: GITHUB_BASE_URL + "3.7.png" },
+                    { id: 'san8', name: "Mortadela e Queijo", price: 17.00, description: "Pão francês com fatias generosas de mortadela e queijo.", image: GITHUB_BASE_URL + "3.8.png" },
+                    { id: 'san9', name: "Beirute", price: 42.00, description: "Pão sírio recheado com carne, queijo, ovo, bacon e salada.", image: GITHUB_BASE_URL + "3.9.png" },
                 ],
                 "Sucos": [
-                    { id: 'suc1', name: "Manga", price: 12.00, description: "Suco natural e refrescante de manga.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
-                    { id: 'suc2', name: "Caju", price: 12.00, description: "Suco natural de caju, com um sabor único.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
-                    { id: 'suc3', name: "Morango", price: 12.00, description: "Suco cremoso de morango, feito com a fruta fresca.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
-                    { id: 'suc4', name: "Suco Açaí com Leite e Frutas", price: 20.00, description: "Açaí batido com leite e frutas selecionadas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
-                    { id: 'suc5', name: "Açaí na Tigela", price: 25.00, description: "Açaí puro na tigela, com granola e frutas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Sucos" },
+                    { id: 'suc1', name: "Manga", price: 12.00, description: "Suco natural e refrescante de manga.", image: GITHUB_BASE_URL + "4.1.png" },
+                    { id: 'suc2', name: "Caju", price: 12.00, description: "Suco natural de caju, com um sabor único.", image: GITHUB_BASE_URL + "4.2.png" },
+                    { id: 'suc3', name: "Morango", price: 12.00, description: "Suco cremoso de morango, feito com a fruta fresca.", image: GITHUB_BASE_URL + "4.3.png" },
+                    { id: 'suc4', name: "Suco Açaí com Leite e Frutas", price: 20.00, description: "Açaí batido com leite e frutas selecionadas.", image: GITHUB_BASE_URL + "4.4.png" },
+                    { id: 'suc5', name: "Açaí na Tigela", price: 25.00, description: "Açaí puro na tigela, com granola e frutas.", image: GITHUB_BASE_URL + "4.5.png" },
                 ],
                 "Refrigerantes": [
-                    { id: 'refri1', name: "Coca-Cola", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
-                    { id: 'refri2', name: "Fanta", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
-                    { id: 'refri3', name: "Coca-Cola Zero", price: 6.00, description: "Lata 350ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
-                    { id: 'refri4', name: "Coca-Cola 600ml", price: 9.00, description: "Garrafa 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Refri" },
+                    { id: 'refri1', name: "Coca-Cola", price: 6.00, description: "Lata 350ml.", image: GITHUB_BASE_URL + "5.1.png" },
+                    { id: 'refri2', name: "Fanta", price: 6.00, description: "Lata 350ml.", image: GITHUB_BASE_URL + "5.2.png" },
+                    { id: 'refri3', name: "Coca-Cola Zero", price: 6.00, description: "Lata 350ml.", image: GITHUB_BASE_URL + "5.3.png" },
+                    { id: 'refri4', name: "Coca-Cola 600ml", price: 9.00, description: "Garrafa 600ml.", image: GITHUB_BASE_URL + "5.4.png" },
                 ],
                 "Bebidas": [
-                    { id: 'beb1', name: "Cerveja Heineken 600ml", price: 16.00, description: "Garrafa de 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
-                    { id: 'beb2', name: "Cerveja Skol, Brahma, Original, Petra 600ml", price: 12.00, description: "Garrafa de 600ml.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
-                    { id: 'beb3', name: "Cerveja Long Neck", price: 10.00, description: "Garrafa de 330ml, várias marcas.", image: "https://placehold.co/100x100/f59e0b/3e2723?text=Bebidas" },
+                    { id: 'beb1', name: "Cerveja Heineken 600ml", price: 16.00, description: "Garrafa de 600ml.", image: GITHUB_BASE_URL + "6.1.png" },
+                    { id: 'beb2', name: "Cerveja Skol, Brahma, Original, Petra 600ml", price: 12.00, description: "Garrafa de 600ml.", image: GITHUB_BASE_URL + "6.2.png" },
+                    { id: 'beb3', name: "Cerveja Long Neck", price: 10.00, description: "Garrafa de 330ml, várias marcas.", image: GITHUB_BASE_URL + "6.3.png" },
                 ]
             };
             
@@ -434,15 +435,17 @@
             // Renderiza os ícones das categorias
             function renderCategories() {
                 categoryList.innerHTML = '';
+                let categoryImageCounter = 1;
                 categories.forEach(category => {
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = "category-icon";
                     categoryDiv.dataset.category = category;
                     categoryDiv.innerHTML = `
-                        <img src="${menu[category][0].image}" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
+                        <img src="${GITHUB_BASE_URL}${categoryImageCounter}.0.png" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
                         <span class="category-icon-label">${category}</span>
                     `;
                     categoryList.appendChild(categoryDiv);
+                    categoryImageCounter++;
                 });
             }
 
@@ -454,7 +457,7 @@
                     const itemDiv = document.createElement('div');
                     itemDiv.className = "bg-gray-800 rounded-xl shadow-lg p-4 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4";
                     itemDiv.innerHTML = `
-                        <img src="${item.image}" alt="Imagem de ${item.name}" class="w-20 h-20 rounded-full border-2 border-[#f59e0b] item-image">
+                        <img src="${item.image}" alt="Imagem de ${item.name}" class="w-20 h-20 rounded-full border-2 border-[#fbbf24] item-image">
                         <div class="flex-grow text-center sm:text-left">
                             <h3 class="text-xl font-semibold">${item.name}</h3>
                             <p class="text-sm text-gray-400">${item.description}</p>
