@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu AI Digital - Pedido Online</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -79,20 +80,25 @@
             }
         }
     </style>
+    <!-- Font Awesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="antialiased">
     <div id="app" class="flex flex-col min-h-screen">
+        <!-- Cabeçalho com o banner -->
         <header class="text-center bg-[#5d4037] py-4 px-4 rounded-b-3xl shadow-xl flex flex-col items-center justify-center banner-container">
             <img src="https://i.ibb.co/7NWZKjDh/banner.png" alt="Menu AI Digital">
         </header>
 
+        <!-- Conteúdo Principal - Ícones de Categorias -->
         <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
             <h2 class="text-3xl font-bold text-[#fbbf24] text-center mb-6">Cardápio</h2>
-            <div id="category-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 justify-items-center mx-auto">
-                </div>
+            <div id="category-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-4 justify-items-center mx-auto">
+                <!-- Ícones de categorias serão renderizados aqui pelo JavaScript -->
+            </div>
         </main>
 
+        <!-- Total e Botão para o Carrinho -->
         <div class="sticky bottom-0 left-0 right-0 p-4 bg-gray-800 bg-opacity-90 backdrop-blur-sm shadow-inner rounded-t-3xl flex flex-col md:flex-row justify-between items-center">
             <div class="flex-grow text-center md:text-left mb-2 md:mb-0">
                 <span class="text-lg font-bold">Total:</span>
@@ -103,21 +109,25 @@
             </button>
         </div>
 
+        <!-- Modal para Itens da Categoria -->
         <div id="item-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-item-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
                 <h2 id="modal-category-title" class="text-2xl font-bold text-center mb-4 text-[#fbbf24]"></h2>
                 <div id="modal-item-list" class="space-y-4 max-h-96 overflow-y-auto">
-                    </div>
+                    <!-- Itens da categoria serão inseridos aqui -->
+                </div>
             </div>
         </div>
 
+        <!-- Modal para o Carrinho (revisão e finalização) -->
         <div id="cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-cart-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
                 <h2 class="text-2xl font-bold text-center mb-4 text-[#fbbf24]">Seu Carrinho</h2>
                 <div id="cart-item-list" class="space-y-4 max-h-64 overflow-y-auto">
-                    </div>
+                    <!-- Itens do carrinho serão inseridos aqui -->
+                </div>
                 <div class="mt-4 p-4 rounded-lg bg-gray-800">
                     <div class="flex justify-between items-center mb-2">
                         <span class="font-semibold">Subtotal:</span>
@@ -145,6 +155,7 @@
             </div>
         </div>
 
+        <!-- Modal para Opções de Pedido (Delivery ou Retirada) -->
         <div id="order-options-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
                 <button id="close-options-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -156,6 +167,7 @@
             </div>
         </div>
         
+        <!-- Modal para o Formulário de Finalização (Delivery) -->
         <div id="checkout-delivery-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-delivery-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -197,6 +209,7 @@
             </div>
         </div>
 
+        <!-- Modal para o Formulário de Finalização (Retirada) -->
         <div id="checkout-pickup-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-lg relative">
                 <button id="close-pickup-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -230,6 +243,7 @@
             </div>
         </div>
 
+        <!-- Modal para o Pagamento PIX -->
         <div id="pix-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
                 <button id="close-pix-modal-btn" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -256,6 +270,7 @@
         </div>
 
 
+        <!-- Modal para Carrinho Vazio -->
         <div id="empty-cart-modal" class="modal fixed inset-0 flex items-center justify-center hidden z-50 p-4">
             <div class="bg-[#2a1c18] p-6 rounded-2xl shadow-2xl w-full max-w-sm relative text-center">
                 <h2 class="text-2xl font-bold mb-4 text-[#fbbf24]">Atenção</h2>
@@ -388,7 +403,7 @@
             // Função para gerar o payload PIX
             const generatePixPayload = (totalAmount) => {
                 const pixKey = '11940696636';
-                const merchantName = 'Menu ai Digital';
+                const merchantName = 'Bar Dois Irmãos';
                 const merchantCity = 'SAO PAULO';
                 const txid = `TX${Date.now()}`;
                 const amount = totalAmount.toFixed(2);
@@ -439,17 +454,24 @@
             // Renderiza os ícones das categorias
             function renderCategories() {
                 categoryList.innerHTML = '';
-                let categoryImageCounter = 1;
+                const categoryImages = {
+                    "Refeições": "https://i.ibb.co/ZpGK19z/1-0.png",
+                    "Salgados": "https://i.ibb.co/HLwqPby/2-0.png",
+                    "Sanduíches": "https://i.ibb.co/HDHf7tB/3-0.png",
+                    "Sucos": "https://i.ibb.co/VyDG906/4-0.png",
+                    "Refrigerantes": "https://i.ibb.co/Y4NwkZ5/5-0.png",
+                    "Bebidas": "https://i.ibb.co/N2phrnc/6-0.png",
+                };
+
                 categories.forEach(category => {
                     const categoryDiv = document.createElement('div');
                     categoryDiv.className = "category-icon";
                     categoryDiv.dataset.category = category;
                     categoryDiv.innerHTML = `
-                        <img src="${GITHUB_BASE_URL}${categoryImageCounter}.0.png" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
+                        <img src="${categoryImages[category]}" alt="Ícone de ${category}" onerror="this.onerror=null; this.src='https://placehold.co/100x100/f59e0b/3e2723?text=Ícone'">
                         <span class="category-icon-label">${category}</span>
                     `;
                     categoryList.appendChild(categoryDiv);
-                    categoryImageCounter++;
                 });
             }
 
@@ -708,7 +730,7 @@
 
             // Função para enviar mensagem de WhatsApp
             function sendWhatsAppMessage() {
-                let message = `*Pedido Online - Menu ai Digital*\n\n`;
+                let message = `*Pedido Online - Bar Dois Irmãos*\n\n`;
                 message += `*Tipo:* ${orderType}\n`;
                 message += `*Nome:* ${customerData.name}\n`;
                 if(orderType === 'Delivery') {
